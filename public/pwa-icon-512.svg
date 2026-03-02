@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Control Presion icono grande">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1976d2"/>
+      <stop offset="100%" stop-color="#0d47a1"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="104" fill="url(#bg)"/>
+  <path d="M256 417c-5.4 0-10.7-2.1-14.6-6.2L140.8 310.5c-22.9-23-22.9-60.3 0-83.3 22.9-22.9 60.2-22.9 83.1 0l32.1 32.1 32.1-32.1c22.9-22.9 60.2-22.9 83.1 0 22.9 23 22.9 60.3 0 83.3L270.6 410.8a20.8 20.8 0 0 1-14.6 6.2Z" fill="#e3f2fd"/>
+  <path d="M108 256h64l22-42 38 84 32-62 20 40h120" fill="none" stroke="#0d47a1" stroke-linecap="round" stroke-linejoin="round" stroke-width="22"/>
+</svg>
