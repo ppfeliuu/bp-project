@@ -9,6 +9,8 @@ import {
   Select,
   MenuItem,
   Stack,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material';
 import {
   Chart as ChartJS,
@@ -36,6 +38,8 @@ ChartJS.register(
 const BloodPressureChart: React.FC = () => {
   const records = useBloodPressureStore((state) => state.records);
   const [timeRange, setTimeRange] = React.useState<string>('7');
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const getFilteredRecords = () => {
     const now = new Date();
@@ -74,12 +78,17 @@ const BloodPressureChart: React.FC = () => {
 
   const chartData = {
     labels: filteredRecords.map(record =>
-      new Date(`${record.date}T${record.time}`).toLocaleDateString('es-ES', {
-        day: '2-digit',
-        month: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit',
-      })
+      isMobile
+        ? new Date(`${record.date}T${record.time}`).toLocaleDateString('es-ES', {
+            day: '2-digit',
+            month: '2-digit',
+          })
+        : new Date(`${record.date}T${record.time}`).toLocaleDateString('es-ES', {
+            day: '2-digit',
+            month: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+          })
     ),
     datasets: [
       {
@@ -87,20 +96,25 @@ const BloodPressureChart: React.FC = () => {
         data: filteredRecords.map(record => record.systolic),
         borderColor: 'rgb(255, 99, 132)',
         backgroundColor: 'rgba(255, 99, 132, 0.2)',
-        tension: 0.1,
+        tension: 0.25,
+        pointRadius: isMobile ? 2 : 3,
+        pointHoverRadius: isMobile ? 4 : 5,
       },
       {
         label: 'Tensión Baja (Diastólica)',
         data: filteredRecords.map(record => record.diastolic),
         borderColor: 'rgb(54, 162, 235)',
         backgroundColor: 'rgba(54, 162, 235, 0.2)',
-        tension: 0.1,
+        tension: 0.25,
+        pointRadius: isMobile ? 2 : 3,
+        pointHoverRadius: isMobile ? 4 : 5,
       },
     ],
   };
 
   const options = {
     responsive: true,
+    maintainAspectRatio: false,
     animation: {
       duration: 600,
       easing: 'easeInOutQuart' as const,
@@ -115,9 +129,19 @@ const BloodPressureChart: React.FC = () => {
     plugins: {
       legend: {
         position: 'top' as const,
+        labels: {
+          boxWidth: isMobile ? 10 : 24,
+          boxHeight: isMobile ? 10 : 12,
+          usePointStyle: true,
+          pointStyle: 'line',
+          font: {
+            size: isMobile ? 11 : 12,
+          },
+          padding: isMobile ? 10 : 16,
+        },
       },
       title: {
-        display: true,
+        display: !isMobile,
         text: 'Evolución de la Presión Arterial',
       },
     },
@@ -127,14 +151,25 @@ const BloodPressureChart: React.FC = () => {
         min: 60,
         max: 180,
         title: {
-          display: true,
+          display: !isMobile,
           text: 'Presión (mmHg)',
+        },
+        ticks: {
+          font: {
+            size: isMobile ? 10 : 12,
+          },
         },
       },
       x: {
         title: {
-          display: true,
+          display: !isMobile,
           text: 'Fecha y Hora',
+        },
+        ticks: {
+          maxTicksLimit: isMobile ? 4 : 8,
+          font: {
+            size: isMobile ? 10 : 12,
+          },
         },
       },
     },
@@ -159,16 +194,24 @@ const BloodPressureChart: React.FC = () => {
     <Card>
       <CardContent>
         <Stack spacing={3}>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: { xs: 'stretch', sm: 'center' },
+              flexDirection: { xs: 'column', sm: 'row' },
+              gap: 1.5,
+            }}
+          >
             <Box>
-              <Typography variant="h6">
+              <Typography variant="h6" sx={{ fontSize: { xs: '1.25rem', sm: '1.5rem' } }}>
                 Gráfica de Evolución
               </Typography>
               <Typography variant="caption" color="text.secondary">
                 {filteredRecords.length} registros • {getDateRangeInfo()}
               </Typography>
             </Box>
-            <FormControl size="small" sx={{ minWidth: 120 }}>
+            <FormControl size="small" sx={{ minWidth: 120, width: { xs: '100%', sm: 'auto' } }}>
               <InputLabel>Período</InputLabel>
               <Select
                 value={timeRange}
@@ -183,7 +226,7 @@ const BloodPressureChart: React.FC = () => {
             </FormControl>
           </Box>
           <Box sx={{
-            height: 400,
+            height: { xs: 280, sm: 400 },
             transition: 'opacity 0.4s ease',
           }}>
             <Line data={chartData} options={options} />

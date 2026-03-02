@@ -25,6 +25,8 @@ import {
   Edit as EditIcon,
   FilterList as FilterListIcon,
   WarningAmber as WarningAmberIcon,
+  CalendarMonth as CalendarMonthIcon,
+  AccessTime as AccessTimeIcon,
 } from '@mui/icons-material';
 import { useBloodPressureStore, type BloodPressureRecord } from '../store/bloodPressureStore';
 import EditBloodPressureDialog from './EditBloodPressureDialog';
@@ -184,15 +186,29 @@ const BloodPressureList: React.FC = () => {
       <Card>
         <CardContent>
           <Stack spacing={3}>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <Typography variant="h6">
-                Historial de Registros ({filteredRecords.length} registros)
-              </Typography>
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: { xs: 'stretch', sm: 'center' },
+                flexDirection: { xs: 'column', sm: 'row' },
+                gap: 1.5,
+              }}
+            >
+              <Box>
+                <Typography variant="h6" sx={{ fontSize: { xs: '1.35rem', sm: '1.5rem' } }}>
+                  Historial de Registros
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {filteredRecords.length} registros
+                </Typography>
+              </Box>
               <Button
                 startIcon={<FilterListIcon />}
                 onClick={() => setShowFilters(!showFilters)}
                 variant={showFilters ? 'contained' : 'outlined'}
                 size="small"
+                sx={{ alignSelf: { xs: 'stretch', sm: 'center' } }}
               >
                 Filtros
               </Button>
@@ -211,7 +227,7 @@ const BloodPressureList: React.FC = () => {
                     onChange={handleFilterChange('startDate')}
                     InputLabelProps={{ shrink: true }}
                     size="small"
-                    sx={{ minWidth: 150 }}
+                    sx={{ minWidth: { xs: '100%', sm: 150 }, width: { xs: '100%', sm: 'auto' } }}
                   />
                   <TextField
                     label="Fecha final"
@@ -220,9 +236,9 @@ const BloodPressureList: React.FC = () => {
                     onChange={handleFilterChange('endDate')}
                     InputLabelProps={{ shrink: true }}
                     size="small"
-                    sx={{ minWidth: 150 }}
+                    sx={{ minWidth: { xs: '100%', sm: 150 }, width: { xs: '100%', sm: 'auto' } }}
                   />
-                  <Button onClick={handleClearFilters} variant="outlined" size="small">
+                  <Button onClick={handleClearFilters} variant="outlined" size="small" sx={{ width: { xs: '100%', sm: 'auto' } }}>
                     Limpiar
                   </Button>
                 </Stack>
@@ -246,7 +262,7 @@ const BloodPressureList: React.FC = () => {
                           borderColor: 'divider',
                           borderRadius: 2,
                           mb: 2,
-                          p: 2,
+                          p: { xs: 1.5, sm: 2 },
                           bgcolor: 'background.paper',
                           boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
                           transition: 'all 0.2s ease-in-out',
@@ -264,34 +280,35 @@ const BloodPressureList: React.FC = () => {
                           flex={1}
                           sx={{
                             display: 'flex',
-                            flexDirection: 'column',
-                            gap: 2,
+                            flexDirection: { xs: 'column', md: 'row' },
+                            alignItems: { xs: 'stretch', md: 'center' },
+                            justifyContent: 'space-between',
+                            gap: { xs: 1.25, md: 2.5 },
+                            pr: { md: 1.5 },
                           }}
                         >
                           <Stack 
-                            direction={{ xs: 'column', sm: 'row' }} 
-                            alignItems={{ xs: 'flex-start', sm: 'center' }} 
-                            spacing={{ xs: 1, sm: 2 }}
+                            direction="row"
+                            alignItems="center"
+                            spacing={2}
+                            flexWrap="wrap"
                           >
-                            <Typography 
-                              variant="h5" 
-                              sx={{ 
-                                fontWeight: 'bold',
-                                color: 'primary.main',
-                                fontSize: { xs: '1.25rem', sm: '1.5rem' }
-                              }}
-                            >
-                              {record.systolic}/{record.diastolic}
-                            </Typography>
-                            <Typography 
-                              variant="body2" 
-                              sx={{ 
-                                color: 'text.secondary',
-                                alignSelf: { xs: 'flex-start', sm: 'center' }
-                              }}
-                            >
-                              mmHg
-                            </Typography>
+                            <Box>
+                              <Typography 
+                                variant="h5" 
+                                sx={{ 
+                                  fontWeight: 'bold',
+                                  color: 'primary.main',
+                                  fontSize: { xs: '1.9rem', sm: '1.5rem' },
+                                  lineHeight: 1.1,
+                                }}
+                              >
+                                {record.systolic}/{record.diastolic}
+                              </Typography>
+                              <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+                                mmHg
+                              </Typography>
+                            </Box>
                             <Chip
                               label={category.label}
                               color={category.color as 'primary' | 'secondary' | 'error' | 'warning' | 'info' | 'success'}
@@ -303,35 +320,47 @@ const BloodPressureList: React.FC = () => {
                             />
                           </Stack>
                           <Stack 
-                            direction={{ xs: 'column', sm: 'row' }} 
-                            spacing={{ xs: 0.5, sm: 2 }}
+                            direction="row"
+                            spacing={1.5}
                             sx={{
-                              flexWrap: 'wrap',
-                              gap: { xs: 0.5, sm: 2 },
+                              flexWrap: 'nowrap',
+                              alignItems: 'center',
                             }}
                           >
-                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                              <Typography variant="body2" sx={{ color: 'primary.main' }}>📅</Typography>
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}>
+                              <CalendarMonthIcon sx={{ fontSize: 16, color: 'primary.main' }} />
                               <Typography variant="body2" color="text.secondary">
                                 {formatDate(record.date)}
                               </Typography>
                             </Box>
-                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                              <Typography variant="body2" sx={{ color: 'primary.main' }}>🕐</Typography>
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}>
+                              <AccessTimeIcon sx={{ fontSize: 16, color: 'primary.main' }} />
                               <Typography variant="body2" color="text.secondary">
                                 {record.time}
                               </Typography>
                             </Box>
                           </Stack>
                         </Box>
-                        <Stack direction="row" spacing={1}>
+                        <Stack
+                          direction="row"
+                          spacing={1}
+                          sx={{
+                            width: { xs: '100%', sm: 'auto' },
+                            justifyContent: { xs: 'flex-end', sm: 'flex-start' },
+                            pt: { xs: 1, sm: 0 },
+                            borderTop: { xs: 1, sm: 0 },
+                            borderLeft: { xs: 0, sm: 1 },
+                            borderColor: 'divider',
+                            pl: { xs: 0, sm: 1.5 },
+                            ml: { xs: 0, sm: 1 },
+                          }}
+                        >
                           <IconButton
                             edge="end"
                             aria-label="edit"
                             onClick={() => handleEditRecord(record)}
                             sx={{
                               p: { xs: 1, sm: 2 },
-                              alignSelf: { xs: 'flex-end', sm: 'center' },
                               '&:hover': {
                                 bgcolor: 'primary.light',
                                 color: 'primary.contrastText',
@@ -347,7 +376,6 @@ const BloodPressureList: React.FC = () => {
                             color="error"
                             sx={{
                               p: { xs: 1, sm: 2 },
-                              alignSelf: { xs: 'flex-end', sm: 'center' },
                               '&:hover': {
                                 bgcolor: 'error.light',
                                 color: 'error.contrastText',
@@ -386,6 +414,7 @@ const BloodPressureList: React.FC = () => {
                     showFirstButton
                     showLastButton
                     disabled={totalPages <= 1}
+                    size="small"
                   />
                 </Box>
               </>
