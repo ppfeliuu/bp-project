@@ -21,7 +21,7 @@ export const AuthLoginCard: React.FC = () => {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [mode, setMode] = useState<AuthMode>('login');
+  const [mode] = useState<AuthMode>('login');
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   const signIn = useAuthStore((state) => state.signIn);
@@ -31,14 +31,14 @@ export const AuthLoginCard: React.FC = () => {
   const error = useAuthStore((state) => state.error);
   const clearError = useAuthStore((state) => state.clearError);
 
-  const handleModeChange = (nextMode: AuthMode) => {
+  /* const handleModeChange = (nextMode: AuthMode) => {
     setMode(nextMode);
     setSuccessMessage(null);
     clearError();
     if (nextMode === 'recover') {
       setPassword('');
     }
-  };
+  }; */
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();

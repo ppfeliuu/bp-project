@@ -100,6 +100,7 @@ const BloodPressureList: React.FC = () => {
   const endItem = Math.min(currentPage * itemsPerPage, filteredRecords.length);
 
   const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    void event;
     setCurrentPage(value);
   };
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   Card,
   CardContent,
@@ -9,11 +9,12 @@ import {
   CircularProgress,
 } from '@mui/material';
 import { supabase } from '../lib/supabase';
+import type { BloodPressureRecord } from '../store/bloodPressureStore';
 
 const SupabaseConnectionTest: React.FC = () => {
   const [status, setStatus] = useState<'idle' | 'testing' | 'success' | 'error'>('idle');
   const [message, setMessage] = useState<string>('');
-  const [records, setRecords] = useState<any[]>([]);
+  const [records, setRecords] = useState<BloodPressureRecord[]>([]);
 
   const testConnection = async () => {
     setStatus('testing');
@@ -21,7 +22,7 @@ const SupabaseConnectionTest: React.FC = () => {
 
     try {
       // Test 1: Verificar conexión básica
-      const { data: testData, error: testError } = await supabase
+      const { error: testError } = await supabase
         .from('blood_pressure_records')
         .select('count')
         .limit(1);
