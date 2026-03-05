@@ -5,6 +5,7 @@ export interface BloodPressureRecord {
   id: string;
   systolic: number;
   diastolic: number;
+  heart_rate: number;
   date: string;
   time: string;
   timestamp: number;

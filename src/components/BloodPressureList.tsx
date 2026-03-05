@@ -27,6 +27,7 @@ import {
   WarningAmber as WarningAmberIcon,
   CalendarMonth as CalendarMonthIcon,
   AccessTime as AccessTimeIcon,
+  Favorite as FavoriteIcon,
 } from '@mui/icons-material';
 import { useBloodPressureStore, type BloodPressureRecord } from '../store/bloodPressureStore';
 import EditBloodPressureDialog from './EditBloodPressureDialog';
@@ -308,6 +309,12 @@ const BloodPressureList: React.FC = () => {
                               <Typography variant="caption" sx={{ color: 'text.secondary' }}>
                                 mmHg
                               </Typography>
+                              <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mt: 0.25 }}>
+                                <FavoriteIcon sx={{ fontSize: 14, color: 'error.main' }} />
+                                <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+                                  {record.heart_rate ?? '-'} lpm
+                                </Typography>
+                              </Box>
                             </Box>
                             <Chip
                               label={category.label}

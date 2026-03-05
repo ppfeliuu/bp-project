@@ -58,6 +58,7 @@ const SupabaseConnectionTest: React.FC = () => {
         id: Date.now().toString(),
         systolic: 120,
         diastolic: 80,
+        heart_rate: 72,
         date: new Date().toISOString().split('T')[0],
         time: new Date().toTimeString().slice(0, 5),
         timestamp: Date.now(),
@@ -139,7 +140,7 @@ const SupabaseConnectionTest: React.FC = () => {
             </Typography>
             {records.map((record) => (
               <Typography key={record.id} variant="body2" component="div">
-                • {record.systolic}/{record.diastolic} mmHg - {record.date} {record.time}
+                • {record.systolic}/{record.diastolic} mmHg · {record.heart_rate} lpm - {record.date} {record.time}
               </Typography>
             ))}
           </Box>

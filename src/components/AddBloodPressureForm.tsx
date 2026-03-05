@@ -16,6 +16,7 @@ import { useBloodPressureStore } from '../store/bloodPressureStore';
 const AddBloodPressureForm: React.FC = () => {
   const [systolic, setSystolic] = useState<string>('');
   const [diastolic, setDiastolic] = useState<string>('');
+  const [heartRate, setHeartRate] = useState<string>('');
   const [date, setDate] = useState<string>(new Date().toISOString().split('T')[0]);
   const [time, setTime] = useState<string>(new Date().toTimeString().slice(0, 5));
   
@@ -26,20 +27,22 @@ const AddBloodPressureForm: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!systolic || !diastolic || !date || !time) {
+    if (!systolic || !diastolic || !heartRate || !date || !time) {
       return;
     }
 
     const systolicNum = parseInt(systolic);
     const diastolicNum = parseInt(diastolic);
+    const heartRateNum = parseInt(heartRate);
 
-    if (isNaN(systolicNum) || isNaN(diastolicNum)) {
+    if (isNaN(systolicNum) || isNaN(diastolicNum) || isNaN(heartRateNum)) {
       return;
     }
 
     await addRecord({
       systolic: systolicNum,
       diastolic: diastolicNum,
+      heart_rate: heartRateNum,
       date,
       time,
     });
@@ -47,6 +50,7 @@ const AddBloodPressureForm: React.FC = () => {
     if (!error) {
       setSystolic('');
       setDiastolic('');
+      setHeartRate('');
     }
   };
 
@@ -86,6 +90,18 @@ const AddBloodPressureForm: React.FC = () => {
                   value={diastolic}
                   onChange={(e) => setDiastolic(e.target.value)}
                   inputProps={{ min: 40, max: 150 }}
+                  required
+                  disabled={loading}
+                />
+              </Box>
+              <Box flex="1 1 calc(50% - 8px)" minWidth={200}>
+                <TextField
+                  fullWidth
+                  label="Frecuencia Cardíaca (lpm)"
+                  type="number"
+                  value={heartRate}
+                  onChange={(e) => setHeartRate(e.target.value)}
+                  inputProps={{ min: 30, max: 220 }}
                   required
                   disabled={loading}
                 />

@@ -22,6 +22,7 @@ interface EditBloodPressureDialogProps {
 type FormDataState = {
   systolic: string;
   diastolic: string;
+  heartRate: string;
   date: string;
   time: string;
 };
@@ -36,6 +37,7 @@ const formDataReducer = (state: FormDataState, action: FormDataAction): FormData
       return {
         systolic: action.payload.systolic.toString(),
         diastolic: action.payload.diastolic.toString(),
+        heartRate: action.payload.heart_rate.toString(),
         date: action.payload.date,
         time: action.payload.time,
       };
@@ -57,6 +59,7 @@ const EditBloodPressureDialog: React.FC<EditBloodPressureDialogProps> = ({
   const initialState: FormDataState = {
     systolic: '',
     diastolic: '',
+    heartRate: '',
     date: '',
     time: '',
   };
@@ -77,20 +80,22 @@ const EditBloodPressureDialog: React.FC<EditBloodPressureDialogProps> = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!record || !formData.systolic || !formData.diastolic || !formData.date || !formData.time) {
+    if (!record || !formData.systolic || !formData.diastolic || !formData.heartRate || !formData.date || !formData.time) {
       return;
     }
 
     const systolicNum = parseInt(formData.systolic);
     const diastolicNum = parseInt(formData.diastolic);
+    const heartRateNum = parseInt(formData.heartRate);
 
-    if (isNaN(systolicNum) || isNaN(diastolicNum)) {
+    if (isNaN(systolicNum) || isNaN(diastolicNum) || isNaN(heartRateNum)) {
       return;
     }
 
     await updateRecord(record.id, {
       systolic: systolicNum,
       diastolic: diastolicNum,
+      heart_rate: heartRateNum,
       date: formData.date,
       time: formData.time,
     });
@@ -151,6 +156,18 @@ const EditBloodPressureDialog: React.FC<EditBloodPressureDialogProps> = ({
                   value={formData.diastolic}
                   onChange={handleInputChange('diastolic')}
                   inputProps={{ min: 40, max: 150 }}
+                  required
+                  disabled={loading}
+                />
+              </Box>
+              <Box flex="1 1 calc(50% - 8px)" minWidth={200}>
+                <TextField
+                  fullWidth
+                  label="Frecuencia Cardíaca (lpm)"
+                  type="number"
+                  value={formData.heartRate}
+                  onChange={handleInputChange('heartRate')}
+                  inputProps={{ min: 30, max: 220 }}
                   required
                   disabled={loading}
                 />
