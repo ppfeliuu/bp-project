@@ -37,7 +37,7 @@ const formDataReducer = (state: FormDataState, action: FormDataAction): FormData
       return {
         systolic: action.payload.systolic.toString(),
         diastolic: action.payload.diastolic.toString(),
-        heartRate: action.payload.heart_rate.toString(),
+        heartRate: action.payload.heart_rate != null ? action.payload.heart_rate.toString() : '',
         date: action.payload.date,
         time: action.payload.time,
       };
@@ -51,26 +51,40 @@ const formDataReducer = (state: FormDataState, action: FormDataAction): FormData
   }
 };
 
+const emptyFormState: FormDataState = {
+  systolic: '',
+  diastolic: '',
+  heartRate: '',
+  date: '',
+  time: '',
+};
+
+const recordToFormState = (record: BloodPressureRecord | null): FormDataState => {
+  if (!record) return emptyFormState;
+  return {
+    systolic: record.systolic.toString(),
+    diastolic: record.diastolic.toString(),
+    heartRate: record.heart_rate != null ? record.heart_rate.toString() : '',
+    date: record.date,
+    time: record.time,
+  };
+};
+
 const EditBloodPressureDialog: React.FC<EditBloodPressureDialogProps> = ({
   open,
   record,
   onClose,
 }) => {
-  const initialState: FormDataState = {
-    systolic: '',
-    diastolic: '',
-    heartRate: '',
-    date: '',
-    time: '',
-  };
-
-  const [formData, dispatch] = useReducer(formDataReducer, initialState);
+  const [formData, dispatch] = useReducer(
+    formDataReducer,
+    record,
+    recordToFormState
+  );
 
   const updateRecord = useBloodPressureStore((state) => state.updateRecord);
   const loading = useBloodPressureStore((state) => state.loading);
   const error = useBloodPressureStore((state) => state.error);
 
-  // Solo sincronizamos cuando el diálogo se abre con un registro diferente
   useEffect(() => {
     if (open && record) {
       dispatch({ type: 'INITIALIZE', payload: record });
