@@ -109,6 +109,28 @@ const BloodPressureChart: React.FC = () => {
         pointRadius: isMobile ? 2 : 3,
         pointHoverRadius: isMobile ? 4 : 5,
       },
+      {
+        label: 'Referencia Sistólica (120)',
+        data: filteredRecords.map(() => 120),
+        borderColor: 'rgb(255, 159, 64)',
+        backgroundColor: 'rgba(255, 159, 64, 0.2)',
+        borderDash: [6, 6],
+        borderWidth: 1.5,
+        pointRadius: 0,
+        pointHoverRadius: 0,
+        tension: 0,
+      },
+      {
+        label: 'Referencia Diastólica (80)',
+        data: filteredRecords.map(() => 80),
+        borderColor: 'rgb(255, 159, 64)',
+        backgroundColor: 'rgba(255, 159, 64, 0.2)',
+        borderDash: [6, 6],
+        borderWidth: 1.5,
+        pointRadius: 0,
+        pointHoverRadius: 0,
+        tension: 0,
+      },
     ],
   };
 
