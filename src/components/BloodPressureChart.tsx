@@ -54,8 +54,7 @@ const BloodPressureChart: React.FC = () => {
         const dateTimeA = new Date(`${a.date}T${a.time}`).getTime();
         const dateTimeB = new Date(`${b.date}T${b.time}`).getTime();
         return dateTimeA - dateTimeB;
-      })
-      .slice(-50);
+      });
   };
 
   const filteredRecords = getFilteredRecords();
